@@ -6,10 +6,10 @@ import Home from "./Home";
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#0004ff"
+      main: "#80baff"
     },
     secondary: {
-      main: "#ff000a"
+      main: "#8c72ff"
     }
   }
 })
