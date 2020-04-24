@@ -9,13 +9,27 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-
-import Header from './Header'
+import {Redirect, useHistory, useLocation} from 'react-router-dom';
+import {IconButton, TextField, Typography} from "@material-ui/core";
+import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles(theme => ({
   container: {
-      backgroundColor: theme.palette.primary
-  }
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center'
+  },
+    textContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: '64px',
+        height: '100%',
+        width: '50%'
+    },
+    textStyle: {
+        color: 'grey',
+    }
 }))
 
 
@@ -23,43 +37,27 @@ const useStyles = makeStyles(theme => ({
 function Home(){
     const classes = useStyles()
     const [result, setResult] = useState(null)
-    useEffect(()=>{
-        axios.get("http://localhost:3001/company/1").then(res => {
-            setResult(res.data.name)
-        })
-    },[])
+    const [result2, setResult2] = useState(null)
+    let history = useHistory();
+    const [search, setSearch] = useState("")
+    const handleSearch = (event) => {
+        if (event.key === "Enter") {
+            //setSearchString(event.target.value)
+            history.push("/company/" + event.target.value)
+        }
+    }
 
-    return (<div className={classes.container}>
-        <Header/>
-        <Grid container spacing={3}>
-            <Grid item xs={12}>
-                <TableContainer component={Paper}>
-                    <Table className={classes.table} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Column 1</TableCell>
-                                <TableCell>Column 2</TableCell>
-                                <TableCell>Column 3</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                                <TableRow>
-                                    <TableCell>{result}</TableCell>
-                                    <TableCell>{result}</TableCell>
-                                    <TableCell>{result}</TableCell>
-                                </TableRow>
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Grid>
-            <Grid item xs={6}>
-                <Paper className={classes.paper}>Graph</Paper>
-            </Grid>
-            <Grid item xs={6}>
-                <Paper className={classes.paper}>Graph</Paper>
-            </Grid>
-        </Grid>
-    </div>)
+    return (
+        <div className={classes.container}>
+                <div className={classes.textContainer}>
+                    <TextField color={"secondary"}
+                               onKeyPress={handleSearch} onChange={(e) => {setSearch(e.target.value)}} label={"Enter company name"} fullWidth/>
+                    <IconButton onClick={() => {history.push("/company/" + search)}}>
+                        <SearchIcon/>
+                    </IconButton>
+                </div>
+        </div>
+    )
 }
 
 export default Home

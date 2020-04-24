@@ -4,29 +4,35 @@ import axios from "axios";
 import MenuIcon from '@material-ui/icons/Menu';
 import {fade, TextField, AppBar, Toolbar, IconButton, Typography} from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
+import {Redirect, useHistory, useLocation} from 'react-router-dom';
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 
-const useStyles = makeStyles(theme => ({
-
-}));
+const useStyles = makeStyles(theme => ({}));
 
 
-export default function Header(){
+export default function Header() {
     const classes = useStyles();
-    const handleSearch = (event)=>{
-        if(event.key === "Enter")
-        {
-            const searchString = event.target.value
-            axios.post(searchString)
+    //const [searchString, setSearchString] = useState(null)
+    let history = useHistory();
+    let location = useLocation();
+    const [search, setSearch] = useState("")
+    let toGoBack = /\/company\//.test(location.pathname)
+    const handleSearch = (event) => {
+        if (event.key === "Enter") {
+            //setSearchString(event.target.value)
+            history.push("/company/" + event.target.value)
         }
     }
 
     return (
         <AppBar>
             <Toolbar>
-                <TextField color={"secondary"} variant={"outlined"} onKeyPress={handleSearch}/>
-                    <IconButton>
-                        <SearchIcon/>
-                    </IconButton>
+                {
+                    toGoBack ? <IconButton onClick={(e) => {
+                        history.goBack()
+                    }}><KeyboardBackspaceIcon/></IconButton> : <Typography>Company Domain Management</Typography>
+                }
+
             </Toolbar>
         </AppBar>
     );
